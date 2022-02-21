@@ -43,8 +43,8 @@ def settings():
         pil_img.save(os.path.join(img_dir, s_filename_thumbnail))
         InstaImagePostUtils.app.logger.info(f"Uploaded {s_filename} to {uuid}")
 
-    mtime = os.stat(img_dir).st_mtime
-    InstaImagePostUtils.pq.put((mtime, uuid))
+    # mtime = os.stat(img_dir).st_mtime
+    # InstaImagePostUtils.pq.put((mtime, uuid))
 
     try:
         if request.form["option"] == "Split Panorama":
