@@ -10,6 +10,6 @@ setup(
         'flask',
         'pillow',
         'click',
-        'guinicorn',
+        'gunicorn',
     ],
 )
