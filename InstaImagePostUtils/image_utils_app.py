@@ -1,54 +1,29 @@
 from flask import Flask, render_template, request, url_for, redirect, send_from_directory
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import BadRequest, InternalServerError
-import hashlib
 import os
-import time
-from enum import Enum
-from util import create_fill, COLOR_DICT, MAX_AR, MIN_AR, split_pano, calculate_dimensions
+import InstaImagePostUtils
+from .util import create_fill, COLOR_DICT, MAX_AR, MIN_AR, split_pano, calculate_dimensions
 from PIL import Image
 
-app = Flask(__name__)
-app.config["UPLOAD_FOLDER"] = "uploads"
 
-ALLOWED_EXTENSIONS = {".jpg", ".png", ".jpeg"}
-BUF_SIZE = 65536  # lets read stuff in 64kb chunks!
-
-
-class ImageOption(Enum):
-    SPLIT = 1
-    FILL = 2
-
-
-def calculate_hash(stream):
-    sha1 = hashlib.sha1()
-    # No need to hash the entire file to create a UUID
-    data = stream.read(BUF_SIZE)
-    sha1.update(data)
-    stream.seek(0)
-    print(sha1.hexdigest())
-    sha1.update(str(time.time_ns()).encode())
-    return sha1.hexdigest()
-
-
-@app.route("/", methods=["GET"])
+@InstaImagePostUtils.app.route("/", methods=["GET"])
 def index():
     return render_template("index.html")
 
 
-# TODO: Generate a preview instead of uploading the same image back/
-@app.route("/settings", methods=["POST"])
+@InstaImagePostUtils.app.route("/settings", methods=["POST"])
 def settings():
     if "img" not in request.files :
         return "No image submitted", 400
     img = request.files["img"]
     ext = os.path.splitext(img.filename)[1]
-    if not img.filename or ext.lower() not in ALLOWED_EXTENSIONS:
+    if not img.filename or ext.lower() not in InstaImagePostUtils.ALLOWED_EXTENSIONS:
         return "No image submitted", 400
 
     if img:
-        uuid = calculate_hash(img.stream)
-        img_dir = os.path.join(app.config["UPLOAD_FOLDER"], uuid)
+        uuid = InstaImagePostUtils.calculate_uuid(img.stream)
+        img_dir = InstaImagePostUtils.get_img_dir(uuid)
 
         try:
             os.mkdir(img_dir)
@@ -66,12 +41,16 @@ def settings():
         s_filename_thumbnail = f"{s_filename_parts[0]}-thumbnail{s_filename_parts[1]}"
         pil_img.thumbnail((600, 600), Image.ANTIALIAS)
         pil_img.save(os.path.join(img_dir, s_filename_thumbnail))
+        InstaImagePostUtils.app.logger.info(f"Uploaded {s_filename} to {uuid}")
+
+    mtime = os.stat(img_dir).st_mtime
+    InstaImagePostUtils.pq.put((mtime, uuid))
 
     try:
         if request.form["option"] == "Split Panorama":
-            option = ImageOption.SPLIT
+            option = InstaImagePostUtils.ImageOption.SPLIT
         elif request.form["option"] == "Crop and Fill":
-            option = ImageOption.FILL
+            option = InstaImagePostUtils.ImageOption.FILL
     except KeyError:
         raise BadRequest
 
@@ -87,13 +66,13 @@ def settings():
                            thumbnail_width=pil_img.width)
 
 
-@app.route("/results", methods=["POST"])
+@InstaImagePostUtils.app.route("/results", methods=["POST"])
 def get_results():
     print(request.form)
     try:
         uuid = request.form["uuid"]
         filename = request.form["filename"]
-        img_dir = os.path.join(app.config["UPLOAD_FOLDER"], uuid)
+        img_dir = os.path.join(InstaImagePostUtils.get_img_dir(uuid))
         filename_parts = os.path.splitext(filename)
         option = request.form["option"]
     except KeyError:
@@ -165,12 +144,12 @@ def get_results():
             )
             output_images.append(new_filename)
 
-    print(output_images)
+    InstaImagePostUtils.app.logger.info(f"Creating output images for {uuid}")
     return render_template("results.html", uuid=uuid, output_images=output_images)
 
 # Handle by nginx in prod?
-@app.route("/display/<uuid>/<filename>")
+@InstaImagePostUtils.app.route("/display/<uuid>/<filename>")
 def display_image(uuid, filename):
     return send_from_directory(
-        app.config["UPLOAD_FOLDER"], uuid + "/" + filename
+        InstaImagePostUtils.app.config["UPLOAD_FOLDER"], uuid + "/" + filename
     )
