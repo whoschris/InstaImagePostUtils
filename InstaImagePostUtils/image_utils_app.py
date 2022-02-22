@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for, redirect, send_from_directory
+from flask import render_template, request, send_from_directory
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import BadRequest, InternalServerError
 import os
@@ -43,9 +43,6 @@ def settings():
         pil_img.save(os.path.join(img_dir, s_filename_thumbnail))
         InstaImagePostUtils.app.logger.info(f"Uploaded {s_filename} to {uuid}")
 
-    # mtime = os.stat(img_dir).st_mtime
-    # InstaImagePostUtils.pq.put((mtime, uuid))
-
     try:
         if request.form["option"] == "Split Panorama":
             option = InstaImagePostUtils.ImageOption.SPLIT
@@ -68,7 +65,6 @@ def settings():
 
 @InstaImagePostUtils.app.route("/results", methods=["POST"])
 def get_results():
-    print(request.form)
     try:
         uuid = request.form["uuid"]
         filename = request.form["filename"]
@@ -147,7 +143,7 @@ def get_results():
     InstaImagePostUtils.app.logger.info(f"Creating output images for {uuid}")
     return render_template("results.html", uuid=uuid, output_images=output_images)
 
-# Handle by nginx in prod?
+# Handled by nginx in production
 @InstaImagePostUtils.app.route("/display/<uuid>/<filename>")
 def display_image(uuid, filename):
     return send_from_directory(

@@ -1,30 +1,21 @@
 import os
 import time
 import hashlib
-import threading
 from enum import Enum
 from flask import Flask
-from queue import PriorityQueue
-from .periodic import initialize_pq, exec_every_n_seconds
 
 ALLOWED_EXTENSIONS = {".jpg", ".png", ".jpeg"}
-BUF_SIZE = 65536  # lets read stuff in 64kb chunks!
-IMAGE_KEEP_TIME_S = 3600
+BUF_SIZE = 65536
 
 app = Flask(__name__)
 app.config["UPLOAD_FOLDER"] = "uploads"
 app.config["FULL_UPLOAD_FOLDER"] = os.path.join(__name__, app.config["UPLOAD_FOLDER"])
-# pq = PriorityQueue()
 
 
 def initialize_app():
     full_upload_dir = os.path.join(__name__, app.config["UPLOAD_FOLDER"])
     if not os.path.exists(full_upload_dir):
         os.mkdir(full_upload_dir)
-    # initialize_pq(pq, full_upload_dir)
-    # t1 = threading.Thread(target=exec_every_n_seconds, args=(1800,)) # Run every 30 min.
-    # t1.daemon = True
-    # t1.start()
 
 
 class ImageOption(Enum):
