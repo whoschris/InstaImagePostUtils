@@ -73,7 +73,6 @@ def create_blur_background(im: Image, size_bg: Tuple, blur_pt: float) -> Image:
     # Apply blur
     max_blur = max(im.height, im.width) / 10
     blur_radius = round(max_blur * blur_pt)
-    print(f"Using blur radius of {blur_radius}.")
     bg = im2.filter(filter=ImageFilter.GaussianBlur(radius=blur_radius))
 
     return bg
@@ -81,17 +80,12 @@ def create_blur_background(im: Image, size_bg: Tuple, blur_pt: float) -> Image:
 
 def create_fill(input_image_path: str, ar_output: float, output_image_path: str, color: Tuple = (255, 255, 255),
                 blur: float = None) -> None:
-    # Output image is written to the same directory
-
     im = Image.open(input_image_path)
     ar_input = im.width / im.height
 
     # Use input image width if the output is "taller" than the input
     # Use input image height if the output is "wider" than the input
-    if isclose(ar_output, ar_input, rel_tol=0.01):
-        print("Input and output aspect ratios are witin 1% of each other. Exiting...")
-        exit(0)
-    elif ar_output < ar_input:
+    if ar_output < ar_input:
         # output image is  taller, use input width for canvas width
         w_output = im.width
         h_output = round(im.width / ar_output)
