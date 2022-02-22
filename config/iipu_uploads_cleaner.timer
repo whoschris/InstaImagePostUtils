@@ -1,0 +1,11 @@
+[Unit]
+Description=Clean InstaImagePostUtils uploads directory every 30 min.
+RefuseManualStart=no
+RefuseManualStop=no
+[Timer]
+OnCalendar=*:0/30
+AccuracySec=1 minute
+Persistent=true
+
+[Install]
+WantedBy=timers.target

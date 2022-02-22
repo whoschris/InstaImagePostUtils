@@ -1,0 +1,10 @@
+[Unit]
+Description=Script remove uploads from InstaImagePostUtils.service that are older than 30 min.
+
+[Service]
+User=ubuntu
+Group=ubuntu
+ExecStart=/home/ubuntu/InstaImagePostUtils/scripts/clean_uploads.sh
+
+[Install]
+WantedBy=multi-user.target

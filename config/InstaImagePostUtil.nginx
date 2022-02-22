@@ -1,0 +1,11 @@
+server {
+   listen 80;
+   server_name 3.21.100.14;
+
+   location / {
+      include proxy_params;
+      # Replace ubuntu user if needed
+      proxy_pass http://unix:/home/ubuntu/InstaImagePostUtils/InstaImagePostUtils.sock;
+   }
+}
+
