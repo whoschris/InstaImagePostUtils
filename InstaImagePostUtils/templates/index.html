@@ -1,0 +1,17 @@
+{% extends "layout.html" %}
+{% block title %}Upload Image{% endblock %}
+{% block content %}
+<h1>Instagram Image Posting Utilities</h1>
+<p>Fill an image to a specific aspect ratio or split a panorama picture to create a continuous image across multiple individual images.</p>
+<form method="post" enctype="multipart/form-data" action="{{ url_for('settings') }}">
+    <div>
+        <label>Upload Photo:
+            <input type="file" id="img" name="img" accept="image/*">
+        </label>
+    </div>
+    <div id="option">
+        <input type="submit" name=option value="Crop and Fill"/>
+        <input type="submit" name=option value="Split Panorama"/>
+    </div>
+</form>
+{% endblock %}

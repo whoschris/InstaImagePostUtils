@@ -1,8 +1,7 @@
 .venv/
 venv/
 .jpg
-uploads/
+InstaImagePostUtils/uploads/
 __pycache__/
 .idea/
-InstaImagePostUtils/templates/
 *.egg-info
