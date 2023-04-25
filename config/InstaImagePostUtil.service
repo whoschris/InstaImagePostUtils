@@ -8,6 +8,8 @@ Group=www-data
 WorkingDirectory=/home/ubuntu/InstaImagePostUtils
 Environment="PATH=/home/ubuntu/InstaImagePostUtils/.venv/bin"
 ExecStart=/home/ubuntu/InstaImagePostUtils/.venv/bin/gunicorn --workers 2 --bind unix:InstaImagePostUtils.sock -m 007 wsgi:app
+Restart=on-failure
+RestartSec=2s
 
 [Install]
 WantedBy=multi-user.target

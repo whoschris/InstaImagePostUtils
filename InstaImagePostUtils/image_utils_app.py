@@ -46,7 +46,7 @@ def settings():
     try:
         if request.form["option"] == "Split Panorama":
             option = InstaImagePostUtils.ImageOption.SPLIT
-        elif request.form["option"] == "Crop and Fill":
+        elif request.form["option"] == "Pad and Fill":
             option = InstaImagePostUtils.ImageOption.FILL
     except KeyError:
         raise BadRequest
@@ -116,7 +116,7 @@ def get_results():
             raise BadRequest
 
         for i in range(1, num_output+1):
-            output_images.append(f"{filename_parts[0]}-split-pano-{i}{filename_parts[1]}")
+            output_images.append(f"{filename_parts[0]}-split-{i}{filename_parts[1]}")
 
         dim = split_pano(os.path.join(img_dir, filename), num_output, img_dir, output_images)
         split_ar = dim["split_width"]/dim["height"]

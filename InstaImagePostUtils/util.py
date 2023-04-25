@@ -1,7 +1,5 @@
 from PIL import Image, ImageFilter
-import click
 import os
-from math import isclose
 from typing import List, Tuple, Any, Dict
 
 # Max and minimum aspect ratios for Instagram
@@ -24,23 +22,6 @@ COLOR_DICT = {
     "white": (255, 255, 255)
 }
 
-
-def confirm_existing_files(files: List) -> None:
-    click.echo("Waring: The following files already exist in the directory:")
-    for file in sorted(files):
-        click.echo("\t" + file)
-    click.confirm("Do you want to continue?", abort=True)
-
-
-def list_output_dir(dir: str) -> List:
-    return [f for f in os.listdir(dir) if os.path.isfile(os.path.join(dir, f))]
-
-
-def create_output_filename(input_image_path: str, output_suffix: str) -> str:
-    _, input_image_filename_ext = os.path.split(input_image_path)
-    filename, ext = os.path.splitext(input_image_filename_ext)
-    output_file = f"{filename}{output_suffix}{ext}"
-    return output_file
 
 def create_blur_background(im: Image, size_bg: Tuple, blur_pt: float) -> Image:
     w_bg = size_bg[0]
@@ -71,7 +52,8 @@ def create_blur_background(im: Image, size_bg: Tuple, blur_pt: float) -> Image:
         ))
 
     # Apply blur
-    max_blur = max(im.height, im.width) / 10
+    # Set max blue to max dim/5. Seems to be good from testing.
+    max_blur = max(im.height, im.width) / 5
     blur_radius = round(max_blur * blur_pt)
     bg = im2.filter(filter=ImageFilter.GaussianBlur(radius=blur_radius))
 

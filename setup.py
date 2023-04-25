@@ -9,7 +9,6 @@ setup(
     install_requires=[
         'flask',
         'pillow',
-        'click',
         'gunicorn',
     ],
 )

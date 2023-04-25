@@ -5,3 +5,4 @@ InstaImagePostUtils/uploads/
 __pycache__/
 .idea/
 *.egg-info
+notes.txt

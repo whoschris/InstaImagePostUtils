@@ -11,42 +11,46 @@
         <input type="hidden" id="filename-hidden" name="filename" value="{{ filename }}">
         <input type="hidden" id="option-hidden" name="option" value="{{ option }}">
     {% if option == "FILL" %}
-        <label for="output-ar-label">Output Aspect Ratio</label>
-        <div id="output-ar-label">
-            <input type="radio" id="4-5" name="output-ar" value="4-5" checked>
-            <label for="4-5">4:5</label>
-            <input type="radio" id="1-1" name="output-ar" value="1-1">
-            <label for="1-1">1:1</label>
-            <input type="radio" id="5-4" name="output-ar" value="5-4">
-            <label for="5-4">5:4</label>
-            <input type="radio" id="3-2" name="output-ar" value="3-2">
-            <label for="3-2">3:2</label>
-            <input type="radio" id="16-9" name="output-ar" value="16-9">
-            <label for="16-9">16:9</label>
-            <p id="ar-warn-fill" style="color:red;">Less than 1% difference between input aspect ratio and selected aspect ratio.</p>
+        <div class="photo-option">
+            <label for="output-ar-label">Output Aspect Ratio</label>
+            <div id="output-ar-label">
+                <input type="radio" id="4-5" name="output-ar" value="4-5" checked>
+                <label for="4-5">4:5</label>
+                <input type="radio" id="1-1" name="output-ar" value="1-1">
+                <label for="1-1">1:1</label>
+                <input type="radio" id="5-4" name="output-ar" value="5-4">
+                <label for="5-4">5:4</label>
+                <input type="radio" id="3-2" name="output-ar" value="3-2">
+                <label for="3-2">3:2</label>
+                <input type="radio" id="16-9" name="output-ar" value="16-9">
+                <label for="16-9">16:9</label>
+                <p id="ar-warn-fill" style="color:red;">Less than 1% difference between input aspect ratio and selected aspect ratio.</p>
+            </div>
         </div>
-        <label for="background-label">Fill Background</label>
-        <div id="background-label">
-            <input type="radio" id="bg-blur" name="background" value="bg-blur" checked>
-            <label for="bg-blur">Gaussian Blur Background</label>
-            <input type="radio" id="bg-black" name="background" value="bg-black">
-            <label for="bg-black">Black Background</label>
-            <input type="radio" id="bg-white" name="background" value="bg-white">
-            <label for="bg-white">White Background</label>
-        </div>
-        <div id="blur-pt-id">
-            <label for="blur-pt">Blur Percentage</label>
-            <input type="range" id="blur-pt" name="blur-pt" value="50" min="1" max="100" oninput="this.nextElementSibling.value = this.value">
-            <output>50</output>
+        <div class="photo-option">
+            <label for="background-label">Fill Background</label>
+            <div id="background-label">
+                <input type="radio" id="bg-blur" name="background" value="bg-blur" checked>
+                <label for="bg-blur">Gaussian Blur Background</label>
+                <input type="radio" id="bg-black" name="background" value="bg-black">
+                <label for="bg-black">Black Background</label>
+                <input type="radio" id="bg-white" name="background" value="bg-white">
+                <label for="bg-white">White Background</label>
+            </div>
+            <div id="blur-pt-id">
+                <label for="blur-pt">Blur Percentage</label>
+                <input type="range" id="blur-pt" name="blur-pt" value="20" min="1" max="100" oninput="this.nextElementSibling.value = this.value">
+                <output>20</output>
+            </div>
         </div>
     {% elif option == "SPLIT" %}
-        <div>
+        <div class="photo-option">
             <label for="n-split">Number of Final Images</label>
             <input type="number" id="n-split" name="n-split" min="2" max="4" value="2">
             <p id="ar-warn-split" style="color:red;">Output image aspect ratio is outside of Instagram's bounds.</p>
         </div>
         <label for="letterbox-label">Create <a href="https://en.wikipedia.org/wiki/Letterboxing_(filming)">Letterboxed</a> Image?</label>
-        <div id="letterbox-label">
+        <div class="photo-option" id="letterbox-label">
             <input type="radio" id="lb-none" name="letterbox" value="lb-none" checked>
             <label for="lb-none">Do Not Create Letterboxed Image</label>
             <input type="radio" id="lb-black" name="letterbox" value="lb-black">

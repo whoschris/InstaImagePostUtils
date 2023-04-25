@@ -2,7 +2,9 @@
 {% block title %}Results{% endblock %}
 {% block content %}
 <h2>Processed Images</h2>
+<div id="result-link-list">
 {% for im in output_images %}
-<a href="{{ url_for('display_image',uuid=uuid,filename=im) }}">{{ im }}</a><br>
+<a href="{{ url_for('display_image',uuid=uuid,filename=im) }}" target="_blank" rel="noopener noreferrer">{{ im }}</a><br>
 {% endfor %}
+</div>
 {% endblock %}

@@ -2,15 +2,27 @@
 {% block title %}Upload Image{% endblock %}
 {% block content %}
 <h1>Instagram Image Posting Utilities</h1>
-<p>Fill an image to a specific aspect ratio or split a panorama picture to create a continuous image across multiple individual images.</p>
 <form method="post" enctype="multipart/form-data" action="{{ url_for('settings') }}">
-    <div>
+    <div id="upload">
         <label>Upload Photo:
             <input type="file" id="img" name="img" accept="image/*">
         </label>
     </div>
-    <div id="option">
-        <input type="submit" name=option value="Crop and Fill"/>
+    <h2>Options</h2>
+    <div id="processing-type">
+        <p>Add padding to an image to meet a specific aspect ratio. Fill with blur, white, or black border.</p>
+        <img id="blur-sample" src="static/blur_example.jpg" alt="Sample image with blurred border" height="500">
+        <input type="submit" name=option value="Pad and Fill"/>
+
+        <p>Split a wide image into multiple for seamless swiping.</p>
+        <div class="pano-sample-row">
+            <div class="pano-sample-col">
+                <img src="static/pano1.jpg" alt="Split panorama 1" height="400">
+            </div>
+            <div class="pano-sample-col">
+                <img src="static/pano2.jpg" alt="Split panorama 2" height="400">
+            </div>
+        </div>
         <input type="submit" name=option value="Split Panorama"/>
     </div>
 </form>
